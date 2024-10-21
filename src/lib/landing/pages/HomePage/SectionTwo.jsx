@@ -1,15 +1,24 @@
-import { Box, Grid, ImageListItem, Typography, styled } from '@mui/material';
+import { Box, Grid, Typography, styled } from '@mui/material';
 import React from 'react';
-import Photo from '../../../../assets/f77ca20b70b8ec4625f929fb85e567f4.png';
+import Video from '../../../../assets/videos/homepageVid.mp4';
 
 export const SectionContainer = styled(Box)(({ theme }) => ({
+  video: {
+    borderRadius: 20,
+    boxShadow: "5px 9px 12px 11px rgba(0, 0, 0, 0.4)"
+  },
   padding: theme.spacing(4, 10),
   [theme.breakpoints.down('md')]: {
     padding: theme.spacing(4, 4),
+    video: {
+      width: '100%',
+      height: '100%',
+      margin: "0 auto"
+    }
   },
-
   [theme.breakpoints.up('xl')]: {
     padding: theme.spacing(8, 20),
+
   },
 }));
 
@@ -21,13 +30,13 @@ const SectionTwo = () => {
       <Typography variant="h3" textAlign={'center'} sx={{ direction: 'rtl', marginBottom: '3rem' }} fontWeight={900}>
         אז מה צפוי לנו?
       </Typography>
-      <Grid container alignItems={'center'}>
+      <Grid container alignItems={'center'} justifyContent={"center"} gap={25}>
         <Grid item xs={12} md={4}>
-          <ImageListItem>
-            <img src={Photo} alt="" />
-          </ImageListItem>
+          <video muted loop playsInline autoPlay>
+            <source src={Video}/>
+          </video>
         </Grid>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={6}>
           <Grid container spacing={8}>
             <Grid item xs={12} md={6}>
               <Typography variant="h1" color="secondary" fontWeight={900}>
