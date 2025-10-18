@@ -1,13 +1,25 @@
 import * as React from 'react';
 
-import { LinkedIn as LinkedInIcon } from '@mui/icons-material';
+import { GitHub as GitHubIcon, LinkedIn as LinkedInIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 import { Avatar, IconButton, Stack, Typography } from '@mui/material';
 import { TeamMemberCardContainer } from './TeamMemberCard.style';
+import { checkImagePermission } from './utils';
 
-const TeamMemberCard = ({ profileImage, name, about, linkedin }) => {
+const TeamMemberCard = ({ profileImage, name, about, linkedin, gitHub }) => {
   const [isImgLoaded, setIsImgLoaded] = React.useState(false);
+  const [isValide, setIsValide] = React.useState(false);
+
+  React.useEffect(() => {
+    const res = checkImagePermission(profileImage);
+    if (res) {
+      setIsValide(true);
+      setIsImgLoaded(true);
+    }
+  }, [profileImage]);
+
+  if (!isValide) return null;
 
   return (
     <TeamMemberCardContainer>
@@ -17,7 +29,7 @@ const TeamMemberCard = ({ profileImage, name, about, linkedin }) => {
         alignItems="center"
         justifyContent="space-around"
         padding={2}
-        height={{ xs: '350px', lg: '350px', xl: '400px' }}
+        height={{ xs: '300px', lg: '300px', xl: '400px' }}
       >
         <Avatar
           src={profileImage}
@@ -44,9 +56,21 @@ const TeamMemberCard = ({ profileImage, name, about, linkedin }) => {
         >
           {about}
         </Typography>
+      </Stack>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        spacing={2}
+        paddingBottom={2}
+      >
         <Link to={linkedin} target="_blank">
           <IconButton>
             <LinkedInIcon fontSize="large" color="primary" />
+          </IconButton>
+        </Link>
+        <Link to={gitHub} target="_blank">
+          <IconButton>
+            <GitHubIcon fontSize="large" color="primary" />
           </IconButton>
         </Link>
       </Stack>
