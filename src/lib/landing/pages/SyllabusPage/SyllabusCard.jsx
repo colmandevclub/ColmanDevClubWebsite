@@ -17,13 +17,13 @@ const carouselSettings = {
     },
 }
 
-export const SyllabusCard = ({ youtubeVideoIDs, git, subject, index }) => {
+export const SyllabusCard = ({ youtubeVideoIDs, git, subject, index, week }) => {
    
   return (
     <Grid item xs={12} sm={10} md={6} lg={4} display={"flex"} alignItems={"center"}  > 
         <StyledCard key={index}>
             <Typography p={2} fontWeight={900} variant="h4">
-                Week {index + 1}
+                Week {week}
             </Typography>
 
             <div 

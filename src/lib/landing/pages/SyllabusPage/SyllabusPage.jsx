@@ -44,6 +44,7 @@ const SyllabusPage = () => {
           return (
             <SyllabusCard 
               key={lesson.id}
+              week={lesson.id}
               youtubeVideoIDs={lesson.youtube} 
               git={lesson.git} 
               subject={lesson.subject} 
