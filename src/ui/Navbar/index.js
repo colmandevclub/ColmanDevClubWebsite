@@ -13,6 +13,7 @@ const pages = [
   { title: 'Home', path: '/' },
   { title: 'The Team', path: '/team' },
   { title: 'Join Us', path: '/signup' },
+  
   // { title: "Signin", path: "/signin" },
 ];
 
