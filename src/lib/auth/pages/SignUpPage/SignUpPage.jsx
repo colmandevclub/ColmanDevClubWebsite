@@ -1,22 +1,27 @@
-import { Box, Checkbox, Container, Grid, Typography } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
-import * as React from 'react';
-import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
-import { EntranceAnimation } from 'src/animation';
-import UserDoc from 'src/classes/User.class';
-import { deleteUserFromFirebase, signupWithFirebase, updateUser } from 'src/config/firebase-utils';
-import { roles } from 'src/constants/roles';
-import { allRules, errorMessages, labels } from 'src/data';
-import { UserService } from 'src/services/user.service';
-import { ArrowButton, TransitionsModal } from 'src/ui';
-import FormInputField from 'src/ui/FormInputField';
-import FormSelectField from 'src/ui/FormSelectField';
-import Loader from './components/Loader';
-import SignUpMethod from './components/SignUpMethod';
-import css from './style.module.css';
-import { UserAuth } from '../../authContext';
+import { Box, Checkbox, Container, Grid, Typography } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import * as React from "react";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import { EntranceAnimation } from "src/animation";
+import UserDoc from "src/classes/User.class";
+import {
+  deleteUserFromFirebase,
+  signupWithFirebase,
+  updateUser,
+} from "src/config/firebase-utils";
+import { roles } from "src/constants/roles";
+import { allRules, errorMessages, labels } from "src/data";
+import { UserService } from "src/services/user.service";
+import { ArrowButton, TransitionsModal } from "src/ui";
+import FormInputField from "src/ui/FormInputField";
+import FormSelectField from "src/ui/FormSelectField";
+import Loader from "./components/Loader";
+import SignUpMethod from "./components/SignUpMethod";
+import css from "./style.module.css";
+import { UserAuth } from "../../authContext";
+import { Link } from "react-router-dom";
 
 const FIELDS_MAP = {
   TextField: FormInputField,
@@ -24,8 +29,8 @@ const FIELDS_MAP = {
 };
 
 export const SigninMethods = {
-  FIREBASE: 'FIREBASE',
-  GOOGLE: 'GOOGLE',
+  FIREBASE: "FIREBASE",
+  GOOGLE: "GOOGLE",
 };
 
 const SignUpPage = () => {
@@ -40,19 +45,17 @@ const SignUpPage = () => {
   const [rules, setRules] = React.useState(false);
   const [profilePic, setProfilePic] = React.useState(null);
   const [profilePicPreview, setProfilePicPreview] = React.useState(null);
-  const [email, setEmail] = React.useState('');
-  const [name, setName] = React.useState('');
-  const [checkBoxes, setCheckBoxes] = React.useState({
-    first: false,
-    second: false,
-  });
+  const [email, setEmail] = React.useState("");
+  const [name, setName] = React.useState("");
   const { user } = UserAuth();
   const [validationErrors, setValidationErrors] = React.useState({});
 
   const storage = getStorage();
 
   const filterdLabels =
-    methodClicked === SigninMethods.FIREBASE ? labels : labels.filter((label) => label.key !== 'password');
+    methodClicked === SigninMethods.FIREBASE
+      ? labels
+      : labels.filter((label) => label.key !== "password");
 
   const handleFirebaseSignUp = async () => {
     const newAuthUser = await signupWithFirebase({
@@ -62,7 +65,7 @@ const SignUpPage = () => {
 
     // TODO: export to function
     setLoader(true);
-    let profilePicUrl = '';
+    let profilePicUrl = "";
     if (profilePic) {
       const storageRef = ref(storage, `profilePics/${profilePic.name}`);
       await uploadBytes(storageRef, profilePic);
@@ -80,22 +83,21 @@ const SignUpPage = () => {
 
   const onSignupHandler = async () => {
     try {
-      if (!checkBoxes.first && !checkBoxes.second) {
-        toast.error('יש לבחור תאריך מיון');
-        return;
-      }
 
-      const validationState = filterdLabels.reduce((obj, { key, validator }) => {
-        obj[key] = !validator(formValues[key]);
-        return obj;
-      }, {});
+      const validationState = filterdLabels.reduce(
+        (obj, { key, validator }) => {
+          obj[key] = !validator(formValues[key]);
+          return obj;
+        },
+        {}
+      );
 
       setValidationErrors(validationState);
 
       if (Object.keys(validationState).length === 0) return;
       for (const key in validationState) {
-        if (key === 'experienceDetails' && formValues['experience'] !== 'כן') {
-          validationState[key] = validationState['experience'];
+        if (key === "experienceDetails" && formValues["experience"] !== "כן") {
+          validationState[key] = validationState["experience"];
         }
 
         if (validationState[key]) {
@@ -104,15 +106,6 @@ const SignUpPage = () => {
       }
       if (!rules) return;
 
-      //TODO: @OptimaLPro - this need to be an array of dates, not a string.
-      let sortingDates = '';
-      if (checkBoxes.first && checkBoxes.second) {
-        sortingDates = '10.11.2024, 14.11.2024';
-      } else if (checkBoxes.first) {
-        sortingDates = '10.11.2024';
-      } else {
-        sortingDates = '14.11.2024';
-      }
 
       let userData = null;
 
@@ -135,8 +128,7 @@ const SignUpPage = () => {
           school_year: formValues.schoolYear,
           program: formValues.program,
           experience: formValues.experience,
-          experience_details: (formValues.experienceDetails ?? '').trim(),
-          test_day: sortingDates, //need to be an array of dates
+          experience_details: (formValues.experienceDetails ?? "").trim(),
         },
       });
 
@@ -165,7 +157,7 @@ const SignUpPage = () => {
   };
 
   const goHome = () => {
-    navigate('/');
+    navigate("/");
     window.scrollTo(0, 0);
   };
 
@@ -174,22 +166,22 @@ const SignUpPage = () => {
       <Container
         maxWidth="md"
         sx={{
-          paddingTop: '3rem',
-          paddingBottom: '3rem',
+          paddingTop: "3rem",
+          paddingBottom: "3rem",
         }}
       >
         <Typography
           variant="h3"
           sx={{
-            textAlign: 'center',
-            marginBottom: '50px',
+            textAlign: "center",
+            marginBottom: "50px",
             fontWeight: 700,
-            letterSpacing: '2px',
+            letterSpacing: "2px",
           }}
         >
-          <span className={css['text-yellow']}>Submit</span> Application
+          <span className={css["text-yellow"]}>הרשמה</span> לאתר
         </Typography>
-        <div className={css['container-signup']}>
+        <div className={css["container-signup"]}>
           {!methodClicked && (
             <SignUpMethod
               setMethodClicked={setMethodClicked}
@@ -201,17 +193,17 @@ const SignUpPage = () => {
           )}
         </div>
 
-        <div className={css['container']}>
+        <div className={css["container"]}>
           {methodClicked && (
             <>
               <Box
                 sx={{
-                  backgroundColor: '#0a0a1b',
+                  backgroundColor: "#0a0a1b",
                   padding: {
-                    lg: '20px 80px 20px 80px',
+                    lg: "20px 80px 20px 80px",
                   },
-                  borderRadius: '10px',
-                  border: '1px solid #1F1F53',
+                  borderRadius: "10px",
+                  border: "1px solid #1F1F53",
                 }}
               >
                 <Grid
@@ -224,85 +216,113 @@ const SignUpPage = () => {
                   marginTop={2}
                 >
                   <Avatar
-                    sx={{ width: 150, height: 150, marginBottom: '15px', bgcolor: 'grey' }}
+                    sx={{
+                      width: 150,
+                      height: 150,
+                      marginBottom: "15px",
+                      bgcolor: "grey",
+                    }}
                     src={profilePicPreview}
                   />
                   <Box
                     component="label"
                     sx={{
-                      backgroundColor: '#f6c927',
-                      borderRadius: '5px',
-                      width: 'fit-content',
-                      padding: '10px',
-                      color: 'black',
-                      fontWeight: 'bold',
-                      cursor: 'pointer',
-                      boxShadow: '0px 0px 10px 0px #f6c927bd',
+                      backgroundColor: "#f6c927",
+                      borderRadius: "5px",
+                      width: "fit-content",
+                      padding: "10px",
+                      color: "black",
+                      fontWeight: "bold",
+                      cursor: "pointer",
+                      boxShadow: "0px 0px 10px 0px #f6c927bd",
                     }}
                   >
                     Upload Image
-                    <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleUploadClick} />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      onChange={handleUploadClick}
+                    />
                   </Box>
                 </Grid>
                 <Box
                   sx={{
-                    display: 'grid',
-                    gridTemplateColumns: { sm: '1fr', md: '1fr 1fr' },
-                    gap: '1rem',
-                    marginBottom: '2rem',
+                    display: "grid",
+                    gridTemplateColumns: { sm: "1fr", md: "1fr 1fr" },
+                    gap: "1rem",
+                    marginBottom: "2rem",
                   }}
                 >
-                  {filterdLabels.map(({ inputType, type, label, key, options, validator }, index) => {
-                    const FieldComponent = FIELDS_MAP[inputType];
-                    return label === 'Experience Details' && formValues['experience'] !== 'כן' ? null : (
-                      <EntranceAnimation key={index} animationDelay={label === 'Experience Details' ? 0 : index * 0.2}>
-                        <Box
-                          sx={{
-                            marginBottom: {
-                              xs: '0.75rem',
-                            },
-                          }}
+                  {filterdLabels.map(
+                    (
+                      { inputType, type, label, key, options, validator },
+                      index
+                    ) => {
+                      const FieldComponent = FIELDS_MAP[inputType];
+                      return label === "Experience Details" &&
+                        formValues["experience"] !== "כן" ? null : (
+                        <EntranceAnimation
+                          key={index}
+                          animationDelay={
+                            label === "Experience Details" ? 0 : index * 0.2
+                          }
                         >
-                          <FieldComponent
-                            type={type ?? 'text'}
+                          <Box
                             sx={{
-                              width: {
-                                xs: '90%',
-                                lg: '100%',
+                              marginBottom: {
+                                xs: "0.75rem",
                               },
-                              alignSelf: 'center',
                             }}
-                            options={options}
-                            label={label}
-                            email={email ?? user.email}
-                            name={name ?? user.displayName}
-                            onChange={(event) => {
-                              setFormValues((prev) => {
-                                return { ...prev, [key]: event.target.value };
-                              });
-                              inputHandler(validator, key, event.target.value);
+                          >
+                            <FieldComponent
+                              type={type ?? "text"}
+                              sx={{
+                                width: {
+                                  xs: "90%",
+                                  lg: "100%",
+                                },
+                                alignSelf: "center",
+                              }}
+                              options={options}
+                              label={label}
+                              email={email ?? user.email}
+                              name={name ?? user.displayName}
+                              onChange={(event) => {
+                                setFormValues((prev) => {
+                                  return { ...prev, [key]: event.target.value };
+                                });
+                                inputHandler(
+                                  validator,
+                                  key,
+                                  event.target.value
+                                );
+                              }}
+                              error={validationErrors[key]}
+                            />
+                          </Box>
+                          <Typography
+                            sx={{
+                              textAlign: "start",
+                              color: "#f44336",
                             }}
-                            error={validationErrors[key]}
-                          />
-                        </Box>
-                        <Typography
-                          sx={{
-                            textAlign: 'start',
-                            color: '#f44336',
-                          }}
-                        >
-                          {validationErrors[key] ? errorMessages[key] : ''}
-                        </Typography>
-                      </EntranceAnimation>
-                    );
-                  })}
+                          >
+                            {validationErrors[key] ? errorMessages[key] : ""}
+                          </Typography>
+                        </EntranceAnimation>
+                      );
+                    }
+                  )}
                 </Box>
-                <Grid container sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Grid
+                  container
+                  sx={{ display: "flex", justifyContent: "center" }}
+                >
                   <Grid item xs={12} md={6}>
                     <TransitionsModal
                       openModal={openModal}
                       setOpenModal={setOpenModal}
-                      title={'נרשמת בהצלחה!'}
+                      title={"נרשמת לאתר בהצלחה!"}
                       closeOnOverlay={false}
                       btnText="מעבר לדף הבית"
                       btnOnClick={goHome}
@@ -310,30 +330,30 @@ const SignUpPage = () => {
                       <Typography
                         variant="p"
                         sx={{
-                          textAlign: 'center',
-                          marginBottom: '2rem',
-                          marginTop: '2rem',
+                          textAlign: "center",
+                          marginBottom: "2rem",
+                          marginTop: "1rem",
                         }}
                       >
-                        מוזמנים להצטרף לקבוצת הוואטספ שלנו
+                        אם עדיין לא נרשמת ליום המיון –{" "}
+                        <Link
+                          to="/sortday"
+                          style={{
+                            textDecoration: "underline",
+                            color: "white",
+                            fontWeight: "bold",
+                          }}
+                          onClick={() => setOpenModal(false)}
+                        >
+                          לחץ כאן
+                        </Link>
                       </Typography>
-                      <a
-                        style={{
-                          textDecoration: 'none',
-                          color: 'white',
-                          fontWeight: 'bold',
-                          marginRight: '1rem',
-                        }}
-                        href={process.env.REACT_APP_WHATSAPP_GROUP}
-                      >
-                        לחץ כאן
-                      </a>
                     </TransitionsModal>
 
                     <TransitionsModal
                       openModal={openRulesModal}
                       setOpenModal={setOpenRulesModal}
-                      title={'תקנון'}
+                      title={"תקנון"}
                       closeOnOverlay={true}
                       btnText="סגור"
                       btnOnClick={() => setOpenRulesModal(false)}
@@ -345,9 +365,9 @@ const SignUpPage = () => {
                       </ul>
                       <Container
                         sx={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          width: '100%',
+                          display: "flex",
+                          justifyContent: "center",
+                          width: "100%",
                         }}
                       ></Container>
                     </TransitionsModal>
@@ -355,56 +375,18 @@ const SignUpPage = () => {
                     <Loader loading={loader} />
                     <Box
                       sx={{
-                        display: 'grid',
-                        gridTemplateColumns: { sm: '1fr', md: '1fr' },
-                        gap: '1rem',
+                        display: "grid",
+                        gridTemplateColumns: { sm: "1fr", md: "1fr" },
+                        gap: "1rem",
                       }}
                     >
-                      <Typography sx={{ direction: 'rtl', fontWeight: 'bold', fontSize: '20px' }}>
-                        מועד יום מיון (ניתן לבחור את שני התאריכים):
-                      </Typography>
                       <Container
                         sx={{
-                          display: 'flex',
-                          flexDirection: 'row-reverse',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Checkbox
-                          defaultChecked={false}
-                          onClick={() => {
-                            setCheckBoxes({ ...checkBoxes, first: !checkBoxes.first });
-                          }}
-                          sx={{ color: 'white' }}
-                        />
-                        <Typography>10.11.2024</Typography>
-                      </Container>
-                      <Container
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'row-reverse',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          marginBottom: '30px',
-                        }}
-                      >
-                        <Checkbox
-                          defaultChecked={false}
-                          onClick={() => {
-                            setCheckBoxes({ ...checkBoxes, second: !checkBoxes.second });
-                          }}
-                          sx={{ color: 'white' }}
-                        />
-                        <Typography>14.11.2024</Typography>
-                      </Container>
-                      <Container
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'row-reverse',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          marginBottom: '30px',
+                          display: "flex",
+                          flexDirection: "row-reverse",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginBottom: "30px",
                         }}
                       >
                         <Checkbox
@@ -413,11 +395,14 @@ const SignUpPage = () => {
                             setRules((prev) => !prev);
                             setOpenRulesModal(false);
                           }}
-                          sx={{ color: 'white' }}
+                          sx={{ color: "white" }}
                         />
                         <Typography>
-                          אני מאשר\ת את תנאי{' '}
-                          <span className={css['terms']} onClick={() => setOpenRulesModal((prev) => !prev)}>
+                          אני מאשר\ת את תנאי{" "}
+                          <span
+                            className={css["terms"]}
+                            onClick={() => setOpenRulesModal((prev) => !prev)}
+                          >
                             התקנון
                           </span>
                         </Typography>
@@ -425,8 +410,16 @@ const SignUpPage = () => {
                     </Box>
 
                     {/* {rules && ( */}
-                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '40px' }}>
-                      <ArrowButton onClick={onSignupHandler}>Submit</ArrowButton>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginBottom: "40px",
+                      }}
+                    >
+                      <ArrowButton onClick={onSignupHandler}>
+                        Submit
+                      </ArrowButton>
                     </div>
                     {/* )} */}
                   </Grid>

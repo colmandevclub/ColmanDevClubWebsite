@@ -38,8 +38,8 @@ const SectionThree = () => {
       <Box sx={{
         display: 'flex', justifyContent: 'center', borderBottom: '1px solid #1F1F53', paddingBottom: '3rem',
       }}>
-        <ArrowButton variant="contained" onClick={() => navigate('/signup')}>
-          לחצו להגשת מועמדות
+        <ArrowButton variant="contained" onClick={() => navigate('/sortday')}>
+          להרשמה ליום מיון
         </ArrowButton>
       </Box >
     </>
