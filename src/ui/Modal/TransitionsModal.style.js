@@ -11,6 +11,6 @@ export const ModalBox = styled(Box)({
   width: 400,
   border: '2px solid #000',
   boxShadow: '24px', // Added "px" for boxShadow
-  padding: '16px', // Added padding instead of "p"
+  padding: '25px',
   direction: 'rtl',
 });

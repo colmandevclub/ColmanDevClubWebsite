@@ -4,8 +4,13 @@ import { Button, Card, Stack, Typography } from '@mui/material';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from 'src/config/firebase-config';
 import { SigninMethods } from '../SignUpPage';
+import { useNavigate } from 'react-router-dom';
+
 
 const SignUpMethod = ({ setMethodClicked, setEmail, setName, setFormValues, setProfilePicPreview }) => {
+
+  const navigate = useNavigate();
+
   const handleGoogleSignIn = async () => {
     try {
       const { user } = await signInWithPopup(auth, googleProvider);
@@ -17,6 +22,7 @@ const SignUpMethod = ({ setMethodClicked, setEmail, setName, setFormValues, setP
         name: user.displayName,
         profilePic: user.photoURL,
       });
+      navigate('/');
     } catch (error) {
       console.error(error);
     } finally {

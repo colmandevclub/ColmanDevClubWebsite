@@ -8,7 +8,7 @@ import { SignInPage, SignUpPage } from 'src/lib/auth/pages';
 import { Footer } from 'src/lib/landing/components';
 import { AuthContextProvider } from '../auth/authContext';
 import ProtectedRoute from 'src/utils/protectedRoutes';
-
+import SortRegistrationPage from './pages/SortRegistrationPage/SortRegistrationPage'
 
 const LandingRouter = () => {
   return (
@@ -23,6 +23,7 @@ const LandingRouter = () => {
           <Route path="/syllabus" element={<ProtectedRoute><SyllabusPage /></ProtectedRoute>} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/signin" element={<SignInPage />} />
+          <Route path="/sortday" element={<SortRegistrationPage />} />
         </Routes>
         <Footer />
       </AuthContextProvider>

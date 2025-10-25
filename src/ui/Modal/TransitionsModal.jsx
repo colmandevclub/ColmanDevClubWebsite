@@ -12,6 +12,9 @@ export default function TransitionsModal({
   closeOnOverlay,
   btnText,
   btnOnClick,
+  btnSize,
+  btnSx,
+  buttonClassName,
 }) {
   return (
     <div>
@@ -34,7 +37,7 @@ export default function TransitionsModal({
               id="transition-modal-title"
               variant="h6"
               component="h2"
-              sx={{ fontWeight: 'bold', textDecoration: 'underline' }}
+              sx={{ fontWeight: 'bold', textDecoration: 'none' }}
             >
               {title}
             </Typography>
@@ -51,7 +54,9 @@ export default function TransitionsModal({
                   variant="contained"
                   onClick={btnOnClick}
                   style={{ marginTop: '1rem' }}
-                  className={css['button']}
+                  size={btnSize || 'medium'}
+                  sx={btnSx}
+                  className={`${css['button']} ${buttonClassName || ''}`}
                 >
                   {btnText}
                 </Button>
