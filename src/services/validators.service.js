@@ -10,8 +10,9 @@ export const Validators = {
     return passwordRegex.test(password);
   },
   validateName: (name) => {
-    const nameRegex = /^[a-zA-Z]{2,}$/;
-    return nameRegex.test(name);
+    const trimmedName = (name ?? '').trim();
+    const nameRegex = /^[A-Za-z]+(?:[ '\-][A-Za-z]+)+$/;
+    return nameRegex.test(trimmedName);
   },
   validatePhone: (phone) => {
     const phoneRegex = /^[0-9]{10,}$/;
