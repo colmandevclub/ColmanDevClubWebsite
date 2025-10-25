@@ -23,7 +23,7 @@ const LandingRouter = () => {
           <Route path="/syllabus" element={<ProtectedRoute><SyllabusPage /></ProtectedRoute>} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/signin" element={<SignInPage />} />
-          <Route path="/sortday" element={<SortRegistrationPage />} />
+          <Route path="/assessment-day" element={<SortRegistrationPage />} />
         </Routes>
         <Footer />
       </AuthContextProvider>

@@ -53,7 +53,7 @@ const SectionOne = () => {
             <br />
             <br />
           </Typography>
-          <ArrowButton onClick={() => navigate('/sortday')}>להרשמה ליום מיון</ArrowButton>
+          <ArrowButton onClick={() => navigate('/assessment-day')}>להרשמה ליום מיון</ArrowButton>
         </Stack>
       </Grid>
       <Grid item xs={12}>
