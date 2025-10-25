@@ -337,7 +337,7 @@ const SignUpPage = () => {
                       >
                         אם עדיין לא נרשמת ליום המיון –{" "}
                         <Link
-                          to="/sortday"
+                          to="/assessment-day"
                           style={{
                             textDecoration: "underline",
                             color: "white",
