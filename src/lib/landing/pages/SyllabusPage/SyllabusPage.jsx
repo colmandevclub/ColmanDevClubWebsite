@@ -45,9 +45,10 @@ const SyllabusPage = () => {
             <SyllabusCard 
               key={lesson.id}
               youtubeVideoIDs={lesson.youtube} 
-              git={lesson.git} 
+              exercise={lesson.exercise} 
               subject={lesson.subject} 
               index={index}
+              image={lesson.placeholder}
             />
           );
         })}
