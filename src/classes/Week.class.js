@@ -10,6 +10,7 @@ class Week {
     other_links,
     is_visible,
     created_at,
+    order_num,
   }) {
     this.title = title;
     this.programRef = programRef;
@@ -21,6 +22,7 @@ class Week {
     this.other_links = other_links;
     this.is_visible = is_visible;
     this.created_at = created_at;
+    this.order_num = order_num;
 
     this.validateWeek();
   }

@@ -1,10 +1,10 @@
 
 export const generateRows = (data, totalColCriteria, totalRowCriteria) => {
+  if (! Array.isArray(data) || data.length === 0) { return []; }
+
   const mainColumnKey = Object.keys(data[0])[0];
 
-
-  // Initialize total counts for each middle sub-column based on totalRowCriteria
-  const totalRowCountsPerCol = {}; // Key: fieldName, Value: count
+  const totalRowCountsPerCol = {};
 
   const rows = data.map((rowData, index) => {
 
@@ -13,7 +13,7 @@ export const generateRows = (data, totalColCriteria, totalRowCriteria) => {
       [mainColumnKey]: rowData[mainColumnKey],
     };
 
-    const totalColCountsPerRow = {}; // For accumulating totals in this row for the last sub-columns
+    const totalColCountsPerRow = {}; 
     Object.keys(totalColCriteria).forEach((key) => {
       totalColCountsPerRow[key] = 0; 
     });
@@ -27,12 +27,10 @@ export const generateRows = (data, totalColCriteria, totalRowCriteria) => {
             const fieldName = `${key}_${subKey}`;
             row[fieldName] = value;
 
-            // Increment the total count for the specified criteria in totalColCriteria
             if (totalColCriteria[subKey] && value === totalColCriteria[subKey]) {
               totalColCountsPerRow[subKey] += 1; 
             }
 
-            // Increment the total count for middle sub-columns on last row based on totalRowCriteria
             if (totalRowCriteria[subKey] && value === totalRowCriteria[subKey]) {
               if (!totalRowCountsPerCol[fieldName]) {
                 totalRowCountsPerCol[fieldName] = 0;
@@ -46,7 +44,6 @@ export const generateRows = (data, totalColCriteria, totalRowCriteria) => {
       }
     });
 
-    // Add total counts for this row in the last sub-columns
     Object.keys(totalColCountsPerRow).forEach((key) => {
       row[`total_${key}`] = totalColCountsPerRow[key];
     });

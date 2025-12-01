@@ -86,6 +86,7 @@ export const theme = createTheme({
           '&:hover': {
             boxShadow: '20px 20px 70px #1F1F53',
             background: '#F6C927',
+            color:'#000000'
           },
         },
         disabled: {},

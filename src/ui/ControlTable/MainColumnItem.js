@@ -11,10 +11,10 @@ const MainColumnItem = ({ data }) => {
 
   return (
     <Stack direction={'row'} px={2}>
-      <Avatar key={data.title} src={data.img ?? ''} />
-      <div key={data.title} className="main-column-text">
+      <Avatar  src={data.img ?? ''} />
+      <div className="main-column-text">
         {data.title && (
-          <div key={data.title} className="main-column-title" style={{ color: '#F6C927' }}>
+          <div className="main-column-title" style={{ color: '#F6C927' }}>
             {data.title}
           </div>
         )}

@@ -1,8 +1,9 @@
 import React from 'react';
 import StyledTableCell from './styledTableCell';
-import { TableRow } from '@mui/material';
+import { TableRow, IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 
-const TableHeader = ({ columns }) => (
+const TableHeader = ({ columns ,onEditColumnHandler}) => (
   <React.Fragment>
     <TableRow>
       {columns.map((column) => {
@@ -20,6 +21,17 @@ const TableHeader = ({ columns }) => (
               cellType={cellType}
             >
               {column.headerName}
+              {column.column_id && (
+                <IconButton
+                onClick={() => onEditColumnHandler(column.column_id)}
+                size="small"
+                aria-label="edit column"
+                sx={{backgroundColor: 'transparent'}}
+                >
+                  <EditIcon fontSize="small" style={{color:'#ffffff'}} />
+                </IconButton>
+              )}
+
             </StyledTableCell>
           );
         } else {

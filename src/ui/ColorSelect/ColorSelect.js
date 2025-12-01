@@ -10,7 +10,6 @@ const ColorSelect = ({ colors, onColorSelect, defaultValue }) => {
   useEffect(() => {
     const initialKey = defaultValue || Object.keys(colors)[0];
     setSelectedKey(initialKey);
-    onColorSelect({ key: initialKey, value: colors[initialKey] });
   }, [colors, defaultValue, onColorSelect]);
 
   const handleColorChange = (event) => {

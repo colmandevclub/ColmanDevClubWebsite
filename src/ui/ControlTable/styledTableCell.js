@@ -11,6 +11,7 @@ const StyledTableCell = styled(({ cellType, ...other }) => (
   border: 'none',
   borderRadius: '5px',
   height: '50px',
+  textAlign: 'center',
   ...(cellType === 'header-top' && {
     borderBottomLeftRadius: '0px',
     borderBottomRightRadius: '0px',
@@ -27,6 +28,7 @@ const StyledTableCell = styled(({ cellType, ...other }) => (
     borderBottomRightRadius: '0px',
     borderTopLeftRadius: '10px',
     borderTopRightRadius: '10px',
+    fontSize: '20px',
   }),
 }));
 

@@ -4,7 +4,7 @@ import StyledTableCell from './styledTableCell';
 import { TableRow } from '@mui/material';
 import ColorSelect from '../ColorSelect/ColorSelect';
 
-const TableBodyContent = ({ rows, columns, columnColorsMap }) => (
+const TableBodyContent = ({ rows, columns, columnColorsMap, onChangeHandler }) => (
   <>
     {rows.map((row) => (
       <TableRow key={row.id}>
@@ -14,13 +14,13 @@ const TableBodyContent = ({ rows, columns, columnColorsMap }) => (
               const value = row[subColumn.field];
               const columnType = subColumn.type;
               const colorMap = columnColorsMap[columnType];
-
+              const statusId = row[subColumn.id];
               return (
                 <StyledTableCell key={subColumn.field} style={{ width: subColumn.width }} cellType="body">
                   {colorMap && value && colorMap[value] !== undefined ? (
                     <ColorSelect
                       colors={colorMap}
-                      onColorSelect={(color) => console.log(`Selected ${color.key} for ${subColumn.field}`)}
+                      onColorSelect={async (color) =>  {await onChangeHandler(statusId, subColumn.type, color.key)}}
                       defaultValue={value}
                     />
                   ) : (
