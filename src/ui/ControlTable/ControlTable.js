@@ -17,7 +17,7 @@ const ControlTable = (props) => {
       setColumns(newColumns);
       setRows(newRows);
     }
-  }, [props.data]);
+  }, [props.data, props.totalColCriteria, props.totalRowCriteria]);
 
   return (
     <TableContainer component={Paper} sx={{ borderRadius: 3, overflow: 'auto', height: '80svh' }}>

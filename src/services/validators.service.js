@@ -11,7 +11,7 @@ export const Validators = {
   },
   validateName: (name) => {
     const trimmedName = (name ?? '').trim();
-    const nameRegex = /^[A-Za-z]+(?:[ '\-][A-Za-z]+)+$/;
+    const nameRegex = /^[A-Za-z]+(?:[ '-][A-Za-z]+)+$/;
     return nameRegex.test(trimmedName);
   },
   validatePhone: (phone) => {
