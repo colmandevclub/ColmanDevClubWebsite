@@ -74,8 +74,8 @@ const selectionValidation = (selectValue) => {
 
 export const fetchAllUsers = async () => {
   const users = await fetchData('users');
-  users.forEach((user) => {
-    sendDataToAgudaForm(
+  await Promise.all(users.map((user) => {
+    return sendDataToAgudaForm(
       user.formValues.email,
       user.formValues.fullName,
       user.formValues.phoneNumber,
@@ -87,7 +87,7 @@ export const fetchAllUsers = async () => {
       false,
       false
     );
-  });
+  }));
 };
 
 export const sendDataToAgudaForm = async (

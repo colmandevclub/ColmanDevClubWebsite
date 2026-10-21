@@ -31,9 +31,7 @@ export const ExpandedList = ({ list, item }) => {
     }
 
     return () => {
-      if (container) {
-        resizeObserver.unobserve(container);
-      }
+      resizeObserver.disconnect();
     };
   }, []);
 

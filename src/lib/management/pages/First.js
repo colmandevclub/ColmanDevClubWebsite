@@ -57,25 +57,6 @@ const First = () => {
     <Stack justifyContent="center" alignItems="center" width="100%" height="100%">
       <Button onClick={handleCreateNewUser}>Create New User</Button>
       <Button onClick={handleCreateNewWeek}>Create New Week</Button>
-      {/* {users.data.map((user) => {
-        const { newUser, formValues } = user;
-        return (
-          <Stack key={user.id} direction="row">
-            {newUser?.fullName ?? formValues?.fullName}
-            <Button onClick={() => deleteUser.mutate(user)}>Delete</Button>
-            <Button
-              onClick={() =>
-                updateUser.mutate({
-                  userId: user.id,
-                  updatedData: { ...user, newUser: { ...newUser, fullName: 'John Doe' } },
-                })
-              }
-            >
-              Update
-            </Button>
-          </Stack>
-        );
-      })} */}
     </Stack>
   );
 };
