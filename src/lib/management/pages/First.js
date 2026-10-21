@@ -1,21 +1,11 @@
 import { Button, Stack } from '@mui/material';
 import User from 'src/classes/User.class';
 import Week from 'src/classes/Week.class';
-import { signupWithFirebase } from 'src/config/firebase-utils';
 import { roles } from 'src/constants/roles';
-import { useDeleteUser, useGetUsers, useUpdateUser } from 'src/hooks/firebase.hooks';
 import { UserService } from 'src/services/user.service';
 import { weekService } from 'src/services/week.service';
 
 const First = () => {
-  const users = useGetUsers();
-  const updateUser = useUpdateUser();
-  const deleteUser = useDeleteUser();
-
-  if (users.isLoading) {
-    return <div>Loading...</div>;
-  }
-
   const handleCreateNewUser = async () => {
     const newUser = new User({
       email: 'barshoshani274@gmail.com',
@@ -36,7 +26,7 @@ const First = () => {
         test_day: new Date(),
       },
     });
-    const user = await UserService.create(newUser);
+    return UserService.create(newUser);
   };
 
   const handleCreateNewWeek = async () => {
@@ -53,32 +43,13 @@ const First = () => {
       created_at: new Date(),
     });
 
-    const weekData = await weekService.create({ ...week });
+    return weekService.create({ ...week });
   };
 
   return (
     <Stack justifyContent="center" alignItems="center" width="100%" height="100%">
       <Button onClick={handleCreateNewUser}>Create New User</Button>
       <Button onClick={handleCreateNewWeek}>Create New Week</Button>
-      {/* {users.data.map((user) => {
-        const { newUser, formValues } = user;
-        return (
-          <Stack key={user.id} direction="row">
-            {newUser?.fullName ?? formValues?.fullName}
-            <Button onClick={() => deleteUser.mutate(user)}>Delete</Button>
-            <Button
-              onClick={() =>
-                updateUser.mutate({
-                  userId: user.id,
-                  updatedData: { ...user, newUser: { ...newUser, fullName: 'John Doe' } },
-                })
-              }
-            >
-              Update
-            </Button>
-          </Stack>
-        );
-      })} */}
     </Stack>
   );
 };

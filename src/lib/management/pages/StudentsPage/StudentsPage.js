@@ -444,33 +444,6 @@ const studentsData = [
   },
 ];
 
-const exmapleMember = {
-  id: '1',
-  user: {
-    name: 'Alice',
-    email: 'asdasd',
-  },
-  accepted: true,
-  team: '1',
-  weeks: [
-    {
-      title: 1,
-      tasks: 'didNotSubmit',
-      presence: 'missed',
-    },
-    {
-      title: 2,
-      tasks: 'approved',
-      presence: 'missed',
-    },
-    {
-      title: 3,
-      tasks: 'completed',
-      presence: 'missed',
-    },
-  ],
-};
-
 // Use DBML to define your database structure
 // Docs: https://dbml.dbdiagram.io/docs
 
