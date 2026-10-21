@@ -52,6 +52,7 @@ const PrivateRoutes = () => {
 
   React.useEffect(() => {
     test();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin]);
 
   return (

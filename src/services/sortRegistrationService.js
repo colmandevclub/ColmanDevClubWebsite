@@ -3,6 +3,20 @@ import { db } from 'src/config/firebase-config';
 import { toast } from 'react-toastify';
 
 const COLLECTION = 'tryout_registrations';
+const SHEET_WEBHOOK_URL = process.env.REACT_APP_TRYOUT_SHEET_URL;
+
+const appendToSheet = (registration) => {
+  if (!SHEET_WEBHOOK_URL) return;
+  fetch(SHEET_WEBHOOK_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({
+      ...registration,
+      experience: registration.experience === 'p' ? 'כן' : 'לא',
+    }),
+  }).catch((e) => console.error('Error writing tryout registration to sheet:', e));
+};
 
 export const sortRegistrationService = {
   create: async (payload) => {
@@ -32,6 +46,8 @@ export const sortRegistrationService = {
         email: emailKey,        
         createdAt: serverTimestamp(),
       });
+
+      appendToSheet({ ...payload, email: emailKey });
 
       return true;
     } catch (e) {

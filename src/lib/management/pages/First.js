@@ -2,10 +2,17 @@ import { Button, Stack } from '@mui/material';
 import User from 'src/classes/User.class';
 import Week from 'src/classes/Week.class';
 import { roles } from 'src/constants/roles';
+import { useGetUsers } from 'src/hooks/firebase.hooks';
 import { UserService } from 'src/services/user.service';
 import { weekService } from 'src/services/week.service';
 
 const First = () => {
+  const users = useGetUsers();
+
+  if (users.isLoading) {
+    return <div>Loading...</div>;
+  }
+
   const handleCreateNewUser = async () => {
     const newUser = new User({
       email: 'barshoshani274@gmail.com',
@@ -26,7 +33,7 @@ const First = () => {
         test_day: new Date(),
       },
     });
-    return UserService.create(newUser);
+    await UserService.create(newUser);
   };
 
   const handleCreateNewWeek = async () => {
@@ -43,7 +50,7 @@ const First = () => {
       created_at: new Date(),
     });
 
-    return weekService.create({ ...week });
+    await weekService.create({ ...week });
   };
 
   return (
