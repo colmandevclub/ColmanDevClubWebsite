@@ -198,7 +198,7 @@ const SortRegistrationPage = () => {
                     marginTop: "1rem",
                   }}
                 >
-                  מוזמנים להצטרף לקבוצת הוואטסאפ שלנו{" "}
+                  {/* מוזמנים להצטרף לקבוצת הוואטסאפ שלנו{" "}
                   <a
                     style={{
                       textDecoration: "underline",
@@ -210,7 +210,7 @@ const SortRegistrationPage = () => {
                     rel="noopener noreferrer"
                   >
                     לחץ כאן
-                  </a>
+                  </a> */}
                 </Typography>
 
                 <Typography
