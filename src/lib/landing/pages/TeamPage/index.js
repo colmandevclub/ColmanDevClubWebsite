@@ -5,33 +5,101 @@ import { TeamMemberCard } from '../../components';
 import css from './style.module.css';
 import { useFirestoreFetch } from 'src/hooks/useFirestoreFetch';
 
-const activeMentorNames = [
-  'tamir abutbul',
-  'gil heller',
-  'tal braun',
-  'elad abutbul',
-  'almog lavi',
-  'natali mizrahi',
-  'tehila gadidiyan',
-];
-const legacyMentorNames = ['tamir abutbul', 'gil heller', 'oz itzak', 'oz izhak'];
+export const normalizeName = (name) => name?.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
 
-const normalizeName = (name) => name?.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+export const isLegacyMember = (card = {}) => {
+  const rawValue = card.legacy ?? card.isLegacy ?? card.is_legacy ?? card.isLegacyMentor;
+
+  if (rawValue === null || rawValue === undefined || rawValue === '') {
+    return false;
+  }
+
+  if (typeof rawValue === 'string') {
+    return ['true', 'yes', 'legacy', '1'].includes(rawValue.trim().toLowerCase());
+  }
+
+  return Boolean(rawValue);
+};
+
+export const getMemberYear = (card = {}) => {
+  const rawYear = card.year ?? card.activityYear ?? card.activity_year ?? card.membershipYear;
+
+  if (rawYear === null || rawYear === undefined || rawYear === '') {
+    return null;
+  }
+
+  if (typeof rawYear === 'string') {
+    const trimmed = rawYear.trim();
+    if (!trimmed) return null;
+
+    const numericValue = Number(trimmed);
+    return Number.isFinite(numericValue) ? numericValue : trimmed;
+  }
+
+  return rawYear;
+};
+
+export const getYearSortValue = (value) => {
+  if (value === null || value === undefined || value === '') return Number.NEGATIVE_INFINITY;
+
+  if (typeof value === 'number') return value;
+
+  const matches = value.match(/(\d{4})/g) ?? [];
+  if (matches.length === 0) return Number.NEGATIVE_INFINITY;
+
+  return Number(matches[matches.length - 1]);
+};
+
+export const groupTeamCards = (cards = []) => {
+  const normalizedCards = cards.map((card) => ({
+    ...card,
+    legacy: isLegacyMember(card),
+    year: getMemberYear(card),
+  }));
+
+  const legacyCards = normalizedCards.filter((card) => card.legacy);
+  const yearCards = normalizedCards.filter((card) => !card.legacy);
+
+  const groupedByYear = yearCards.reduce((groups, card) => {
+    const yearKey =
+      card.year !== null && card.year !== undefined && card.year !== '' ? String(card.year) : 'Current';
+
+    groups[yearKey] = [...(groups[yearKey] ?? []), card];
+    return groups;
+  }, {});
+
+  const sortedYearKeys = Object.keys(groupedByYear).sort((yearA, yearB) => {
+    const isCurrentA = yearA === 'Current';
+    const isCurrentB = yearB === 'Current';
+
+    if (isCurrentA && isCurrentB) return 0;
+    if (isCurrentA) return 1;
+    if (isCurrentB) return -1;
+
+    const yearValueA = getYearSortValue(yearA);
+    const yearValueB = getYearSortValue(yearB);
+
+    if (yearValueA === yearValueB) {
+      return yearA.localeCompare(yearB);
+    }
+
+    return yearValueB - yearValueA;
+  });
+
+  return {
+    legacyCards,
+    groupedByYear: sortedYearKeys.reduce((groups, yearKey) => {
+      groups[yearKey] = groupedByYear[yearKey];
+      return groups;
+    }, {}),
+  };
+};
 
   //TODO: remove the using of css module
 export default function TeamPage() {
   const { data: cards = [], isLoading } = useFirestoreFetch('team');
-  const activeCards = activeMentorNames.flatMap((name) =>
-    cards.filter((card) => normalizeName(card.name) === normalizeName(name)),
-  );
-  const legacyCards = legacyMentorNames.flatMap((name) =>
-    cards.filter((card) => normalizeName(card.name) === normalizeName(name)),
-  );
-  const pastCards = cards.filter(
-    (card) =>
-      !activeMentorNames.some((name) => normalizeName(name) === normalizeName(card.name)) &&
-      !legacyMentorNames.some((name) => normalizeName(name) === normalizeName(card.name)),
-  );
+  const { legacyCards, groupedByYear } = groupTeamCards(cards);
+  const yearSections = Object.entries(groupedByYear);
 
   return (
     <Container maxWidth="lg" sx={{ my: 2 }}>
@@ -46,40 +114,34 @@ export default function TeamPage() {
       >
         <span className={css['text-yellow']}>Our</span>Team
       </Typography>
-      <Box component="section" aria-labelledby="active-mentors" sx={{ mt: 4 }}>
-        <Typography id="active-mentors" component="h2" variant="h5" fontWeight={900} color="primary">
-          Active Mentors
-        </Typography>
-     
-        <Loader isLoading={isLoading}>
-          <CardList cards={activeCards} CardComponent={TeamMemberCard} />
-        </Loader>
-      </Box>
-      <Box component="section" aria-labelledby="legacy-mentors" sx={{ mt: 6 }}>
-        <Typography id="legacy-mentors" component="h2" variant="h5" fontWeight={900} color="primary">
-          Legacy Mentors
-        </Typography>
-        <Loader isLoading={isLoading}>
-          <Grid container spacing={3} sx={{ mt: 1 }}>
-            {legacyCards.map((card, index) => (
-              <Grid key={`${card.name}-${index}`} item xs={12} sm={6} md={3}>
-                <TeamMemberCard {...card} legacy />
-              </Grid>
-            ))}
-          </Grid>
-        </Loader>
-      </Box>
-      <Box component="section" aria-labelledby="past-mentors" sx={{ mt: 6, mb: 4 }}>
-        <Typography id="past-mentors" component="h2" variant="h5" fontWeight={900} color="primary">
-          Past Mentors 2025–2026
-        </Typography>
-        <Typography sx={{ mt: 1, opacity: 0.7 }}>
-          Celebrating the mentors who have been part of our journey.
-        </Typography>
-        <Loader isLoading={isLoading}>
-          <CardList cards={pastCards} CardComponent={TeamMemberCard} />
-        </Loader>
-      </Box>
+
+      {legacyCards.length > 0 && (
+        <Box component="section" aria-labelledby="legacy-mentors" sx={{ mt: 6 }}>
+          <Typography id="legacy-mentors" component="h2" variant="h5" fontWeight={900} color="primary">
+            Legacy Mentors
+          </Typography>
+          <Loader isLoading={isLoading}>
+            <Grid container spacing={3} sx={{ mt: 1 }}>
+              {legacyCards.map((card, index) => (
+                <Grid key={`${card.name}-${index}`} item xs={12} sm={6} md={3}>
+                  <TeamMemberCard {...card} legacy />
+                </Grid>
+              ))}
+            </Grid>
+          </Loader>
+        </Box>
+      )}
+
+      {yearSections.map(([year, yearCards]) => (
+        <Box key={year} component="section" aria-labelledby={`mentors-${year}`} sx={{ mt: 6, mb: 4 }}>
+          <Typography id={`mentors-${year}`} component="h2" variant="h5" fontWeight={900} color="primary">
+            {year === 'Current' ? 'Current Mentors' : `Mentors ${year}`}
+          </Typography>
+          <Loader isLoading={isLoading}>
+            <CardList cards={yearCards} CardComponent={TeamMemberCard} />
+          </Loader>
+        </Box>
+      ))}
     </Container>
   );
 }
