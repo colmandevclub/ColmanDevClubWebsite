@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "strict": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "lib": ["DOM", "ES2020"],
+    "types": ["react-scripts"]
+  },
+  "include": ["index.jsx", "components/**/*.jsx", "constants/**/*.js", "useScrollReveal.js", "types.ts", "*.d.ts"]
+}
