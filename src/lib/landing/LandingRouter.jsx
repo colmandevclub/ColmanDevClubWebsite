@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from 'src/ui/Navbar/Navbar';
 import HomePage from 'src/lib/landing/pages/HomePage';
 import TeamPage from 'src/lib/landing/pages/TeamPage';
@@ -10,11 +10,17 @@ import { AuthContextProvider } from '../auth/authContext';
 import ProtectedRoute from 'src/utils/protectedRoutes';
 import SortRegistrationPage from './pages/SortRegistrationPage/SortRegistrationPage'
 
+// The homepage owns its visual shell. All other routes retain the existing chrome.
+const LandingChrome = ({ children }) => {
+  const { pathname } = useLocation();
+  return pathname === '/' ? null : children;
+};
+
 const LandingRouter = () => {
   return (
     <BrowserRouter>
       <AuthContextProvider>
-        <Navbar />
+        <LandingChrome><Navbar /></LandingChrome>
         <Routes>
           <Route index element={<HomePage />} />
           {/* an example of how to use the protected route */}
@@ -25,7 +31,7 @@ const LandingRouter = () => {
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/assessment-day" element={<SortRegistrationPage />} />
         </Routes>
-        <Footer />
+        <LandingChrome><Footer /></LandingChrome>
       </AuthContextProvider>
     </BrowserRouter>
   );
