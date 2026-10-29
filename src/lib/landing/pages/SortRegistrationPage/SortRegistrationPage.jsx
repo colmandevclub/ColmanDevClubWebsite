@@ -20,7 +20,7 @@ const FIELD_OF_STUDY_OPTIONS = [
 ];
 const SCHOOL_YEAR_OPTIONS = ["א'", "ב'", "ג'", "ד'"];
 const EXPERIENCE_OPTIONS = ["כן", "לא"];
-const PREFERRED_DATE_OPTIONS = ["09.11.2025", "13.11.2025"];
+const PREFERRED_DATE_OPTIONS = ["2.11.2026", "10.11.2026"];
 
 const SortRegistrationPage = () => {
   const [form, setForm] = React.useState({
@@ -198,7 +198,7 @@ const SortRegistrationPage = () => {
                     marginTop: "1rem",
                   }}
                 >
-                  מוזמנים להצטרף לקבוצת הוואטסאפ שלנו{" "}
+                  {/* מוזמנים להצטרף לקבוצת הוואטסאפ שלנו{" "}
                   <a
                     style={{
                       textDecoration: "underline",
@@ -210,7 +210,7 @@ const SortRegistrationPage = () => {
                     rel="noopener noreferrer"
                   >
                     לחץ כאן
-                  </a>
+                  </a> */}
                 </Typography>
 
                 <Typography

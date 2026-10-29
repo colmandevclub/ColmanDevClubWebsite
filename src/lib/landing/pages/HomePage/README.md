@@ -11,12 +11,11 @@ The homepage footer reuses the existing faculty/AI Connect and student-union log
 Validation from the repository root:
 
 ```sh
-npm run build
+CI=true npm run build
 node node_modules/typescript/bin/tsc -p src/lib/landing/pages/HomePage/tsconfig.json
-CI=true npm test -- --watchAll=false --runInBand --testPathPattern=HomePage.test.jsx
 CI=true npm test -- --watchAll=false --runInBand
 ```
 
-The original `App.test.js` fails before running its assertions because Firebase's dependency expects `TextEncoder` in Jest. This failure was reproduced before the redesign; the homepage tests avoid importing unrelated application services.
+The existing team-page tests pass. The original `App.test.js` still fails because it renders `App` without the required `RouterProvider`; the app, test, and provider are unchanged from upstream `main`.
 
 Animations use IntersectionObserver and CSS. Content stays visible if observers are unavailable; reduced motion disables animations and smooth scrolling. Internal section links also move keyboard focus. Route links reset scrolling before navigation so the CTA opens the top of the existing registration page.

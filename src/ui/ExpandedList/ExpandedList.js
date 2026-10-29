@@ -18,7 +18,6 @@ export const ExpandedList = ({ list, item }) => {
   const remainingItems = list.length - maxVisibleItems;
 
   useEffect(() => {
-    const container = containerRef.current;
     const resizeObserver = new ResizeObserver((entries) => {
       if (entries[0]) {
         const newWidth = entries[0].contentRect.width;
@@ -26,14 +25,13 @@ export const ExpandedList = ({ list, item }) => {
       }
     });
 
+    const container = containerRef.current;
     if (container) {
       resizeObserver.observe(container);
     }
 
     return () => {
-      if (container) {
-        resizeObserver.unobserve(container);
-      }
+      resizeObserver.disconnect();
     };
   }, []);
 
