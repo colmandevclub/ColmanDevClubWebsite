@@ -1,16 +1,13 @@
 import { Button, Stack } from '@mui/material';
 import User from 'src/classes/User.class';
 import Week from 'src/classes/Week.class';
-import { signupWithFirebase } from 'src/config/firebase-utils';
 import { roles } from 'src/constants/roles';
-import { useDeleteUser, useGetUsers, useUpdateUser } from 'src/hooks/firebase.hooks';
+import { useGetUsers } from 'src/hooks/firebase.hooks';
 import { UserService } from 'src/services/user.service';
 import { weekService } from 'src/services/week.service';
 
 const First = () => {
   const users = useGetUsers();
-  const updateUser = useUpdateUser();
-  const deleteUser = useDeleteUser();
 
   if (users.isLoading) {
     return <div>Loading...</div>;
@@ -36,7 +33,7 @@ const First = () => {
         test_day: new Date(),
       },
     });
-    const user = await UserService.create(newUser);
+    await UserService.create(newUser);
   };
 
   const handleCreateNewWeek = async () => {
@@ -53,7 +50,7 @@ const First = () => {
       created_at: new Date(),
     });
 
-    const weekData = await weekService.create({ ...week });
+    await weekService.create({ ...week });
   };
 
   return (
